@@ -56,10 +56,9 @@ int main(int argc, char*argv[]){
 	win_input = newwin(3, COLS - 2, LINES - 4 , 1);
 	scrollok(win_input, TRUE);
 	wrefresh(win_output);
+
 	start_color();
 	init_pair(1,COLOR_BLUE,COLOR_BLACK);
-
-	//curs_set(0);
 
 	//==================================================================
 
@@ -206,31 +205,12 @@ void *start_f2(void *data)
 		}
 
 		while(a->pong_game_on)
-		{
-			/*
-			char k;
-			noecho();	
-			while(TRUE){
-				memset(buf,'\0',BUFLEN);
-				pthread_mutex_lock(&mutex);
-				if(recv(a->s,buf,BUFLEN,0) > 0 )
-				{
-					k == buf[0];
-					
-					wprintw(a->w_output, "%c\n",buf[0]);//출력
-					wrefresh(a->w_output);
-
-				}	
-				pthread_mutex_unlock(&mutex);
-				usleep(100);
-			}
-			*/
+		{								
 			werase(a->w_output); 
-
 			
 			object scr;
 			int i = 0,cont = 0;
-			int end = 0;
+			int pong_game_start = 0;
 			char k;
 
 			noecho();
@@ -240,77 +220,90 @@ void *start_f2(void *data)
 			object b2={1,scr.y/2,0,false,false};//플레이어2 막대기 선언
 			object b={scr.x/2,scr.y/2,0,false,false};// 공 구조체 선언
 
-  			for (; !end; usleep(4000)) 
-			{
-   				if (++cont%16==0)//볼 속도 조절 
-				{
+			//타이틀를 보여준다.
+  			mvwprintw(a->w_output,12,0,"\t\t\t\t           oooooooooo                                        \n"
+               	     		     		 "\t\t\t\t           888    888  ooooooo    ooooooo    oooooooo8       \n"
+                     	   	     		 "\t\t\t\t           888oooo88 888     888 888   888  888    88o       \n"
+                     		     		 "\t\t\t\t           888       888     888 888   888   888oo888o       \n"
+                     		     		 "\t\t\t\t          o888o        88ooo88  o888   888o         888      \n"
+                     		     		 "\t\t\t\t                                             888ooo888     \n\n"
+                     		     		 "\t\t\t\t  \tPlayer 1 your controls are 'a' and 'q'                \n"
+                     		     		 "\t\t\t\t  \tPlayer 2 your controls are the arrows of the keyboard \n"
+                     		     		 "\t\t\t\t \tPush ANY key to start, 'p' for pause and ESC to quit" ); 
+			wrefresh(a->w_output);
 
-      					if ((b.y==scr.y-1)||(b.y==1))
-        				b.movver=!b.movver;
-      					if ((b.x>=scr.x-2)||(b.x<=2))
-					{
-        					b.movhor=!b.movhor;
-        					if ((b.y==b1.y-1)||(b.y==b2.y-1)) 
-						{
-          						b.movver=false;
-        					} 
-						else if ((b.y==b1.y+1)||(b.y==b2.y+1)) 
-						{
-          						b.movver=true;
-        					} 
-						else if ((b.y != b1.y) && (b.y != b2.y)) 
-						{
-          						(b.x>=scr.x-2) ? b1.c++: b2.c++;
-          						b.x=scr.x/2;
-          						b.y=scr.y/2;
-        					}
-      					}
-      					b.x=b.movhor ? b.x+1 : b.x-1;
-      					b.y=b.movver ? b.y+1 : b.y-1;
-	
-      					if (b1.y<=1)
-        					b1.y=scr.y-2;
-      					if (b1.y>=scr.y-1)
-      	  					b1.y=2;
-      					if (b2.y<=1)
-        					b2.y=scr.y-2;
-      					if (b2.y>=scr.y-1)
-        					b2.y=2;
-    				}
+			if(recv(a->s,buf,BUFLEN,0) > 0)
+			{
+					//pthread_mutex_unlock(&mutex);
+				if(strncmp(buf,"pong_game_start",strlen("pong_game_start"))==0)
+				{
+					pong_game_start = 1;
+				}
+			}
+
+
+  			for (; pong_game_start; usleep(4000)) 
+			{
+				
+
+
+
 
 				memset(buf,'\0',BUFLEN);
 				pthread_mutex_lock(&mutex);
 				
 				if(recv(a->s,buf,BUFLEN,0) > 0)
 				{
-					//pthread_mutex_unlock(&mutex);
-					if(strncmp(buf,PONGGAME,strlen(PONGGAME))==0)
+					if (strncmp(buf,"ball_move",strlen("ball_move"))==0)//볼 속도 조절 
 					{
-						//printf("[INFO]소켓을 닫고 프로그램을 종료합니다\n");
-						a->pong_game_on = TRUE;
+
+						if ((b.y==scr.y-1)||(b.y==1))
+						b.movver=!b.movver;
+						if ((b.x>=scr.x-2)||(b.x<=2))
+						{
+							b.movhor=!b.movhor;
+							if ((b.y==b1.y-1)||(b.y==b2.y-1)) 
+							{
+								b.movver=false;
+							} 
+							else if ((b.y==b1.y+1)||(b.y==b2.y+1)) 
+							{
+								b.movver=true;
+							} 
+							else if ((b.y != b1.y) && (b.y != b2.y)) 
+							{
+								(b.x>=scr.x-2) ? b1.c++: b2.c++;
+								b.x=scr.x/2;
+								b.y=scr.y/2;
+							}
+						}
+						b.x=b.movhor ? b.x+1 : b.x-1;
+						b.y=b.movver ? b.y+1 : b.y-1;
+		
+						if (b1.y<=1)
+							b1.y=scr.y-2;
+						if (b1.y>=scr.y-1)
+							b1.y=2;
+						if (b2.y<=1)
+							b2.y=scr.y-2;
+						if (b2.y>=scr.y-1)
+							b2.y=2;
 					}
-					if(strncmp(buf,QUITMSG,strlen(QUITMSG))==0)
+					k = buf[0];
+					switch (k) // 키 입력 받기
 					{
-						printf("[INFO]소켓을 닫고 프로그램을 종료합니다\n");
-						break;
+						case 'j': b1.y++; break;// 방향키(위) 입력시 플레이어1 막대기 위로 
+						case 'u':   b1.y--; break;// 방향키(아래) 입력시 플레이어1 막대기 아래로
+						case 'q':      b2.y--; break;// q입력시 플레이어2 막대기 위로
+						case 'a':      b2.y++; break;// a입력시 플레이어2 막대기 아래로 
+						case 'p':      getchar(); break;
+						case 0x1B:    endwin(); break;
 					}
-					//wclear(a->w_input);
-					//wprintw(a->w_output, "%s\n", buf);//출력
-					wrefresh(a->w_output);
+
 				}
 				
 				pthread_mutex_unlock(&mutex);
 				
-				k = buf[0];
-    				switch (k) // 키 입력 받기
-    				{
-      					case 'u': b1.y++; break;// 방향키(위) 입력시 플레이어1 막대기 위로 
-      					case 'j':   b1.y--; break;// 방향키(아래) 입력시 플레이어1 막대기 아래로
-      					case 'q':      b2.y--; break;// q입력시 플레이어2 막대기 위로
-      					case 'a':      b2.y++; break;// a입력시 플레이어2 막대기 아래로 
-      					case 'p':      getchar(); break;
-      					case 0x1B:    endwin(); end++; break;
-    				}
     				werase(a->w_output); // 전체 창 지우기
 				
     				mvwprintw(a->w_output,2,scr.x/2-2,"%i | %i",b1.c,b2.c);//점수판 출력

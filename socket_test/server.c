@@ -13,7 +13,6 @@
 
 #include "info.h"
 #define MENU "<MENU>\n1.채팅방 목록 보기\n2.채팅방 참여하기 (사용법: 2 <채팅방 번호>)\n3.프로그램 종료\n(0을 입력하면 메뉴가 다시 표시됩니다.)"
-#define USERMAX 5
 #define CHATNUM 4
 
 //함수 선언
