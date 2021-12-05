@@ -9,7 +9,7 @@
 > 이선홍: 퐁 게임 구현,소켓
 
 ## C.프로젝트 소개 및 개발 내용
-![Alt text](/ponggmae/프로젝트 소개.png "Optional title")
+<img width="1310" alt="프로젝트 주제" src="https://user-images.githubusercontent.com/67679972/144749658-f7c6488d-2562-4353-a00f-47d5fa79c6fe.png">
 
 
 
