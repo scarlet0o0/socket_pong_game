@@ -22,9 +22,18 @@
 <img width="800" alt="다이어그램3" src="https://user-images.githubusercontent.com/67679972/144749888-617f2ec9-84d1-4615-b60a-80003e316dc2.png">
 
 ## E.개발 결과물 사용방법
-![서버시작](https://user-images.githubusercontent.com/67679972/144750133-4f1c260d-ff2c-4bc1-a53e-a82c80fdb08e.jpg)
-<img width="987" alt="클라이언트1" src="https://user-images.githubusercontent.com/67679972/144750208-1231421b-f8cc-4e5e-bb49-bda276531a02.png">
-![클라이언트2](https://user-images.githubusercontent.com/67679972/144750212-0fb8935a-3edc-4a45-9c6e-46cc541045b6.jpg)
+### 1. 서버실행
+<img width="800" alt="클라이언트1" src="https://user-images.githubusercontent.com/67679972/144750133-4f1c260d-ff2c-4bc1-a53e-a82c80fdb08e.jpg">
+### 2. 클라이언트1 실행 
+<img width="800" alt="클라이언트2" src="https://user-images.githubusercontent.com/67679972/144750208-1231421b-f8cc-4e5e-bb49-bda276531a02.png">
+### 3. 클라이언트2 실행
+<img width="800" alt="클라이언트3" src="https://user-images.githubusercontent.com/67679972/144750212-0fb8935a-3edc-4a45-9c6e-46cc541045b6.jpg">
+### 4. 클라이언트 터미널에서 2 0 입력
+<img width="800" alt="클라이언트4" src="https://user-images.githubusercontent.com/67679972/144750358-f19464d6-4c0f-4534-adb3-54033f0e4aa5.png">
+### 4. 클라이언트 터미널에서 2 0 입력
+<img width="800" alt="클라이언트5" src="https://user-images.githubusercontent.com/67679972/144750495-d836bd3f-f53e-436d-88a8-a5bb92e25c32.png">
+### 4. 클라이언트 터미널에서 2 0 입력
+<img width="800" alt="클라이언트6" src="https://user-images.githubusercontent.com/67679972/144750486-a5899425-0e24-4049-9974-6b1a2fb9163e.png">
 
 
 참고한 코드
