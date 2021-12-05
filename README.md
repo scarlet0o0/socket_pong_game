@@ -15,16 +15,14 @@
 ## D.다이어그램
 <img width="800" alt="다이어그램1" src="https://user-images.githubusercontent.com/67679972/144749881-4838d558-f340-4e0a-a45f-c8babf9f9cc7.png">
 
--------
-
 <img width="800" alt="다이어그램2" src="https://user-images.githubusercontent.com/67679972/144749884-d6b147b9-73a4-45e4-984e-f9876b7e66a8.png">
--------
 
 <img width="800" alt="다이어그램4" src="https://user-images.githubusercontent.com/67679972/144749931-f482e720-6b64-4925-8540-469ac3871b8d.png">
---------
 
 <img width="800" alt="다이어그램3" src="https://user-images.githubusercontent.com/67679972/144749888-617f2ec9-84d1-4615-b60a-80003e316dc2.png">
----------
+
+## E.개발 결과물 사용방법
+![서버시작](https://user-images.githubusercontent.com/67679972/144750133-4f1c260d-ff2c-4bc1-a53e-a82c80fdb08e.jpg)
 
 
 참고한 코드
