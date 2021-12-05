@@ -23,6 +23,8 @@
 
 ## E.개발 결과물 사용방법
 ![서버시작](https://user-images.githubusercontent.com/67679972/144750133-4f1c260d-ff2c-4bc1-a53e-a82c80fdb08e.jpg)
+<img width="987" alt="클라이언트1" src="https://user-images.githubusercontent.com/67679972/144750208-1231421b-f8cc-4e5e-bb49-bda276531a02.png">
+![클라이언트2](https://user-images.githubusercontent.com/67679972/144750212-0fb8935a-3edc-4a45-9c6e-46cc541045b6.jpg)
 
 
 참고한 코드
