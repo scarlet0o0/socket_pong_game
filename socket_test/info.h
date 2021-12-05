@@ -19,7 +19,7 @@
 #include <pthread.h>//쓰레드 사용을 위한 
 
 #define PORTNUM 10003
-#define SERVERIPADDR "10.0.2.15"
+#define SERVERIPADDR "192.168.87.122"
 #define BUFLEN 256
 #define TRUE 1
 #define FALSE 0
