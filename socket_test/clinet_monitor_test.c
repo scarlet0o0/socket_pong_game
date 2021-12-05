@@ -57,8 +57,8 @@ int main(int argc, char*argv[]){
 	scrollok(win_input, TRUE);
 	wrefresh(win_output);
 
-	start_color();
-	init_pair(1,COLOR_BLUE,COLOR_BLACK);
+//	start_color();
+//	init_pair(1,COLOR_BLUE,COLOR_BLACK);
 
 	//==================================================================
 
@@ -74,8 +74,8 @@ int main(int argc, char*argv[]){
 
 	memset((char*)&server1,'\n',sizeof(server1));
 	server1.sin_family = AF_INET;
-	server1.sin_addr.s_addr = inet_addr(SERVERIPADDR);
-	server1.sin_port = htons(PORTNUM);
+	server1.sin_addr.s_addr = inet_addr(argv[1]);
+	server1.sin_port = htons(atoi(argv[2]));
 	//=================================================
 
 	
@@ -189,7 +189,6 @@ void *start_f2(void *data)
 				//pthread_mutex_unlock(&mutex);
 				if(strncmp(buf,PONGGAME,strlen(PONGGAME))==0)
 				{
-					//printf("[INFO]소켓을 닫고 프로그램을 종료합니다\n");
 					a->pong_game_on = TRUE;
 				}
 				if(strncmp(buf,QUITMSG,strlen(QUITMSG))==0)
