@@ -53,7 +53,7 @@ void *t_ponggame(void *data)//*t_function
 		else if(pong_game_start)
 		{
 			start = clock();
-			time_num = (int)(((float)start/CLOCKS_PER_SEC)*2);
+			time_num = (int)(((float)start/CLOCKS_PER_SEC)*8);
 			if(ex_num != time_num)
 			{
 				//printf("num : %d\n",qqq);
