@@ -3,7 +3,15 @@
 ## A.프로젝트명
 **온라인 게임 서비스**
 
-팀원 : 안선영,이선홍
+## B.프로젝트 멤버
+팀원
+> 안선영: 마피아 게임 구현, PPT, 소켓
+> 이선홍: 퐁 게임 구현,소켓
+
+## C.프로젝트 소개 및 개발 내용
+![Alt text](/path/to/img.jpg "Optional title")
+
+
 
 참고한 코드
 * [PONG_GAME](https://github.com/vicentebolea/Pong-curses)
