@@ -6,6 +6,7 @@
 ## B.프로젝트 멤버
 팀원
 > 안선영: 마피아 게임 구현, PPT, 소켓
+> 
 > 이선홍: 퐁 게임 구현,소켓
 
 ## C.프로젝트 소개 및 개발 내용
@@ -14,11 +15,16 @@
 ## D.다이어그램
 <img width="800" alt="다이어그램1" src="https://user-images.githubusercontent.com/67679972/144749881-4838d558-f340-4e0a-a45f-c8babf9f9cc7.png">
 
+-------
+
 <img width="800" alt="다이어그램2" src="https://user-images.githubusercontent.com/67679972/144749884-d6b147b9-73a4-45e4-984e-f9876b7e66a8.png">
+-------
 
 <img width="800" alt="다이어그램4" src="https://user-images.githubusercontent.com/67679972/144749931-f482e720-6b64-4925-8540-469ac3871b8d.png">
+--------
 
 <img width="800" alt="다이어그램3" src="https://user-images.githubusercontent.com/67679972/144749888-617f2ec9-84d1-4615-b60a-80003e316dc2.png">
+---------
 
 
 참고한 코드
