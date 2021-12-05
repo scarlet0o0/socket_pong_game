@@ -1,26 +1,14 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/un.h>
-#include <unistd.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h>
-#include <pthread.h>
-
 #include "info.h"
-#define MENU "<MENU>\n1.채팅방 목록 보기\n2.채팅방 참여하기 (사용법: 2 <채팅방 번호>)\n3.프로그램 종료\n(0을 입력하면 메뉴가 다시 표시됩니다.)"
-#define CHATNUM 1
+#define CHATNUM 2 //  퐁게임과 마피아 게임
 
 //함수 선언
 int maxArr(int *n, int size);
-void delete(int *arr, int size, int index);
-void *t_function(void *data);
+void _delete(int *arr, int size, int index);
+void *t_ponggame(void *data);
+void *t_mafiagame(void *data);
 void handler(int sig);
 
+/*
 //체팅방 정보 구조체
 struct ChatRoom{
 	char room_name[20];
@@ -39,6 +27,7 @@ struct ChatInfo {
 	struct UserSockets new_users;
 	struct UserSockets returned_users;
 };
+*/
 	
 int main(void){
 	char buf[BUFLEN];
@@ -46,9 +35,10 @@ int main(void){
 	int access_sock, comm_sock[10], len;
 	
 	struct ChatInfo chatinfo[CHATNUM];
-	pthread_t p_thread[CHATNUM];
-	
-	char *cname[]={"Chateoom-0","Chatroom-1","Chatroom-2","ponggame"};//채팅방 이름
+	//pthread_t p_thread[CHATNUM];
+	pthread_t p_ponggame;
+	pthread_t p_mafiagame;
+	char *cname[]={"PONG_GAME-0","MAFIA_GAME-1"};//채팅방 이름
 
 	int ret;
 	fd_set readfds;
@@ -89,9 +79,14 @@ int main(void){
 		chatinfo[i].new_users.user_num = 0;
 		chatinfo[i].returned_users.user_num = 0;
 		strcpy(chatinfo[i].room.room_name,cname[i]);
-		pthread_create(&p_thread[i],NULL,t_function,(void*)&chatinfo[i]);
-		printf("[Ch.%d] 채팅방을 오픈합니다.\n",i+1); 
 	}
+
+	pthread_create(&p_ponggame,NULL,t_ponggame,(void*)&chatinfo[0]);
+	printf("퐁게임방을 오픈합니다.\n"); 
+	pthread_create(&p_mafiagame,NULL,t_mafiagame,(void*)&chatinfo[1]);
+	printf("마피아게임방을 오픈합니다.\n"); 
+
+	
 	
 	//대기실
 	int waiting_room_n = 0; // 대기실 인원수
@@ -174,7 +169,11 @@ int main(void){
 									strcat(buf,chatinfo[j].room.room_name);
 									strcat(buf," (");
 									strcat(buf,chat_num);
-									strcat(buf,"/2)\n");
+
+									if(j == 0)
+										strcat(buf,"/2)\n");
+									else
+										strcat(buf,"/5)\n");
 								}	
 								if(send(comm_sock[i],buf,sizeof(buf),0) == -1){
 									perror("send");
@@ -187,19 +186,16 @@ int main(void){
 								chat_id =  buf[2] - '0';
 								if(chat_id>=0 && chat_id<=CHATNUM-1){
 
-
-									/*
-									strcpy(buf,PONGGAME);
-									if(send(comm_sock[i],buf,sizeof(buf),0) == -1){
-										perror("send");
-										exit(1);
+									if(chat_id == 0)//퐁게임 채팅방에 들어가는 경우 클라이언트에게 퐁게임 한다고 알려줌 
+									{
+										strcpy(buf,PONGGAME);
+										send(comm_sock[i],buf,sizeof(buf),0);
 									}
-									*/
 									
 									chatinfo[chat_id].new_users.user[chatinfo[chat_id].new_users.user_num] = comm_sock[i];
-									printf("[MAIN] 사용자 %d가 채팅방 %d 에 참여합니다.\n",comm_sock[i],chat_id);
+									printf("[MAIN] 사용자 %d가 채팅방 %s 에 참여합니다.\n",comm_sock[i],chatinfo[chat_id].room.room_name);
 									chatinfo[chat_id].new_users.user_num++;
-									delete(comm_sock,waiting_room_n,i);//배열에서 소켓 삭제
+									_delete(comm_sock,waiting_room_n,i);//배열에서 소켓 삭제
 									waiting_room_n--;//대기실 인원수 한명 감소
 								}
 								else{
@@ -219,7 +215,7 @@ int main(void){
 									exit(1);
 								}
 								close(comm_sock[i]);
-								delete(comm_sock,waiting_room_n,i);
+								_delete(comm_sock,waiting_room_n,i);
 								waiting_room_n--;
 								break;
 							case 4://pong 게임 시작
@@ -252,8 +248,10 @@ int main(void){
 	return 0;
 }
 
-//채팅방 코드
-void *t_function1(void *data)//*t_function
+
+/*
+//퐁게임 코드
+void *t_ponggame(void *data)//t_function
 {	
 	struct timeval t;
 	t.tv_sec = 0;
@@ -279,11 +277,12 @@ void *t_function1(void *data)//*t_function
 			chatinfo->room.user[chatinfo->room.user_num]=chatinfo->new_users.user[i];
 			//새로운 사용자가 들어왔다는 출력문
 			printf("[ch.%d]새로운 참가자 : %d\n",chatinfo->room.room_id,chatinfo->room.user[chatinfo->room.user_num]);
-			delete(chatinfo->new_users.user,chatinfo->new_users.user_num,i);
+			_delete(chatinfo->new_users.user,chatinfo->new_users.user_num,i);
 			chatinfo->room.user_num++;
 			chatinfo->new_users.user_num--;
 			i++;	
 		}
+		//두명 되면 게임 시작 
 		if(chatinfo->room.user_num == 2 && pgs_num)
 		{
 			memset(buf,'\0',BUFLEN);
@@ -343,7 +342,7 @@ void *t_function1(void *data)//*t_function
 								printf("[ch.%d] 사용자 %d를 채팅방에서 제거합니다.\n",chatinfo->room.room_id,chatinfo->room.user[l]);
 								chatinfo->returned_users.user[chatinfo->returned_users.user_num]=chatinfo->room.user[l];
 								chatinfo->returned_users.user_num++;
-								delete(chatinfo->room.user,chatinfo->room.user_num,l);//채팅방에서 사용자 삭제
+								_delete(chatinfo->room.user,chatinfo->room.user_num,l);//채팅방에서 사용자 삭제
 								chatinfo->room.user_num--;// 채팅방 인원수 감소
 							}
 
@@ -381,8 +380,9 @@ void *t_function1(void *data)//*t_function
 	//printf("");
 }
 
-//채팅방 코드
-void *t_function(void *data)
+
+//마피아 코드
+void *t_mafiagame(void *data)
 {	
 	struct timeval t;
 	t.tv_sec = 0;
@@ -410,7 +410,7 @@ void *t_function(void *data)
 			chatinfo->room.user[chatinfo->room.user_num]=chatinfo->new_users.user[i];
 			//새로운 사용자가 들어왔다는 출력문
 			printf("[ch.%d]마피아 게임 새로운 참가자 : %d\n",chatinfo->room.room_id,chatinfo->room.user[chatinfo->room.user_num]);
-			delete(chatinfo->new_users.user,chatinfo->new_users.user_num,i);
+			_delete(chatinfo->new_users.user,chatinfo->new_users.user_num,i);
 			chatinfo->room.user_num++;
 			chatinfo->new_users.user_num--;
 			i++;	
@@ -420,17 +420,6 @@ void *t_function(void *data)
 		{
 			memset(buf,'\0',BUFLEN);
 			strcat(buf,"mafia_game_start");
-			/*
-			for(int i =0;i<chatinfo->room.user_num;i++)
-			{
-				if(send(chatinfo->room.user[i],buf,sizeof(buf),0) == -1)
-				{
-					perror("send");
-					exit(1);
-				}
-					
-			}
-			*/
 			mafia_num_set = TRUE;
 			mafia_start = TRUE;
 
@@ -492,16 +481,6 @@ void *t_function(void *data)
 							//메세지를 받았다면
 							if(recv(chatinfo->room.user[l],buf,BUFLEN,0) > 0) {
 								printf("[ch.%d] 사용자 %d 의 메세지 : %s\n",chatinfo->room.room_id,chatinfo->room.user[l],buf); 
-								/*
-								//메세지가quit 라면
-								if(strncmp(buf,QUITMSG,strlen(QUITMSG)) == 0){
-									printf("[ch.%d] 사용자 %d를 채팅방에서 제거합니다.\n",chatinfo->room.room_id,chatinfo->room.user[l]);
-									chatinfo->returned_users.user[chatinfo->returned_users.user_num]=chatinfo->room.user[l];
-									chatinfo->returned_users.user_num++;
-									delete(chatinfo->room.user,chatinfo->room.user_num,l);//채팅방에서 사용자 삭제
-									chatinfo->room.user_num--;// 채팅방 인원수 감소
-								}
-								*/
 
 								//자기자신 빼고 모두에게 메세지 전송--> 주석 처리 함 
 								char user_id[3];
@@ -536,6 +515,7 @@ void *t_function(void *data)
 	printf("");
 }
 
+*/
 
 //배열에서 최댓값 찾는 함수
 int maxArr(int *n,int size){
@@ -547,7 +527,7 @@ int maxArr(int *n,int size){
 }
 
 //배열원소 삭제 함수 
-void delete(int *arr ,int size, int index){
+void _delete(int *arr ,int size, int index){
 	for(int i = index; i<size-1; i++){
 		arr[i] = arr[i+1];
 	}

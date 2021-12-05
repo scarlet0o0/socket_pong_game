@@ -14,6 +14,8 @@
 #include <signal.h>
 #include <ncursesw/curses.h>
 #include <locale.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <pthread.h>//쓰레드 사용을 위한 
 
 #define PORTNUM 10003
@@ -26,6 +28,36 @@
 #define USERMAX 5
 #define PONGGAME "pong_game"
 
+#define MENU "<MENU>\n1.채팅방 목록 보기\n2.채팅방 참여하기 (사용법: 2 <채팅방 번호>)\n3.프로그램 종료\n(0을 입력하면 메뉴가 다시 표시됩니다.)"
+
+void *t_ponggame(void *data);
+void *t_mafiagame(void *data);
+
+int maxArr(int *n, int size);
+void _delete(int *arr, int size, int index);
+void handler(int sig);
+
+
+//체팅방 정보 구조체
+struct ChatRoom{
+	char room_name[20];
+	int room_id;
+	int user[USERMAX]; // 사용자 소켓 배열
+	int user_num;
+};
+//채팅방에 입장할려는 유저 
+struct UserSockets{
+	int user_num; 
+	int user[USERMAX];
+};
+//채팅방을 나가려는 유저
+struct ChatInfo {
+	struct ChatRoom room;
+	struct UserSockets new_users;
+	struct UserSockets returned_users;
+};
+
+/*
 //마피아 게임 변수들
 char *START_STRING = "방에 입장하였습니다. 게임 대기중입니다..\n";
 char *start_command1 = "start";
@@ -44,3 +76,4 @@ char *victory = "\t그는 마피아입니다.\n\n";
 char *nvictory = "\t그는 마피아가 아닙니다.\n";
 char *mafiavictory = "\t★★★마피아의 승리입니다★★★\n";
 char *ctzvictory = "\t★★★시민의 승리입니다★★★\n";
+*/
